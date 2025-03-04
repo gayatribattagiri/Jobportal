@@ -1,0 +1,293 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  
+  #header {
+    background-color: white;
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  #header .header-left {
+    display: flex;
+    align-items: center;
+  }
+  
+  #header .logo {
+    width: 64px;
+    height: 64px;
+  }
+  
+  #header .logotext {
+    font-size: 40px;
+    font-weight: bolder;
+  }
+  
+  #header .logotext span {
+    color: green;
+  }
+  
+  #header .signin-section {
+    display: flex;
+    align-items: center;
+  }
+  
+  #header .signinicon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  #header .signin {
+    font-size: large;
+    margin-left: 10px;
+    cursor: pointer;
+  }
+  
+  #content {
+    background-color: antiquewhite;
+    flex: 1;
+    padding: 20px;
+    text-align: left;
+  }
+  
+  #footer {
+    background-color: white;
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  #footer .footertext {
+    font-size: 15px;
+  }
+  
+  #footer .socialmedia {
+    display: flex;
+    align-items: center;
+  }
+  
+  #footer .socialmediaicons {
+    width: 25px;
+    height: 25px;
+    margin-left: 10px;
+  }
+  
+  #content .text1, #content .text2, #content .text3 {
+    margin: 20px 0;
+  }
+  
+  #content .text1 {
+    font-size: 30px;
+    font-weight: bold;
+    color: green;
+  }
+  
+  #content .text2 {
+    font-size: 40px;
+    font-weight: bold;
+    color: rgb(0, 5, 0);
+  }
+  
+  #content .text3 {
+    font-size: 30px;
+    font-weight: bold;
+    color: rgb(0, 5, 0);
+  }
+  
+  #content .searchbar {
+    width: 600px;
+    height: 50px;
+    background-color: white;
+    margin: 50px 0 0 0;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+   #content .searchlocation {
+    background-color: white;
+    border: none;
+    height: 40px;
+    padding: 0 10px;
+    flex: 1;
+    border: 1px solid;
+    border-color: white white white black;
+  }
+  #content .searchtext{
+    background-color: white;
+    border: none;
+    height: 40px;
+    padding: 0 10px;
+    flex: 1;
+    border-radius: 20px;
+    border: 1px solid;
+    border-color: white;
+  }
+  #content .searchlocation:focus{
+    border: 1px solid white;
+  }
+  #content .searchtext:focus{
+    border: 1px solid white;
+    outline: none;
+  }
+  
+  #content .searchtext {
+    background: url('/searchicon.png') no-repeat;
+    padding-left: 40px;
+  }
+  
+  #content .searchlocation {
+    background: url('/location.png') no-repeat;
+    background-size: 35px 30px;
+    padding-left: 40px;
+    background-position: 0px center;
+    margin-left: 10px;
+  } 
+  #content .searchbutton {
+    background-color: rgb(48, 232, 16);
+    border: none;
+    height: 40px;
+    padding: 0 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-left: 20px;
+    margin-right: 4px;
+  }
+  #popup {
+    width: 100%;
+    height: 100%;
+    display: none;
+    position: fixed;
+    background-color: rgb(0, 0, 0,.25);
+    z-index: 999;
+    }
+    #popupwindow{
+      width: 300px;
+      height: 450px;
+      position: relative;
+      background-color: rgb(232, 232, 226); 
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      border-radius: 10px;
+    }
+    #popupHeader{
+      width: 100%;
+      height: 60px;
+      font-weight: bold;
+      font-size: 14pt;
+      text-align: center;
+      background-color: green;
+      color: white;
+      line-height: 60px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    
+    }
+    #signin{
+      width: 100%;
+      height: calc(100%  -  60px);
+      background-color: aliceblue;
+      border-bottom-right-radius: 10px;
+      border-bottom-left-radius: 10px;
+      padding: 10px;
+    }
+    #signin .usernamelable{
+      display:block;
+      padding: 40px 0px 3px 0px;
+    }
+    #signin input{
+      width: 100%;
+      height: 30px;
+      border-radius: 2px;
+      border: 3px solid silver;
+      background-color: rgb(235, 235, 229);
+    }
+    #signin .passwordlabel {
+      display: block;
+      padding: 40px 0px 3px 0px;
+    }
+    #signin .forgotpassword{
+    text-align: right;
+    font-size: 15pt;
+    position: relative;
+    top: 10px;
+    }
+  
+    #signin .forgotpassword label:hover{
+      cursor: pointer;
+      color: green;
+      text-decoration: underline;
+    }
+  
+    #signin .signinbutton{
+      width: 100%;
+      height: 35px;
+      background-color: rgb(229, 121, 121);
+      color: white;
+      position: relative;
+      top: 40px;
+      cursor: pointer;
+    }
+  
+    #signin .div2{
+      display: block;
+      text-align: center;
+      position: relative;
+      top: 60px;
+      font-size: 13pt;
+    }
+    #signin .div2 label:hover{
+      display: block;
+      color: green;
+      text-align: center;
+      cursor: pointer;
+    }
+  #content .searchlocation:focus {
+    border: 1px solid;
+    border-color: white white white black;
+    outline: none;
+  }
+  
+  #signup {
+    width: 100%;
+    height: calc(100% - 60px);
+    background-color: aliceblue;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    padding: 10px;
+  }
+  
+  #signup label {
+    display: block;
+    padding: 0 0px 3px 0px;
+  }
+  
+  #signup input, #signup select {
+    width: 100%;
+    height: 30px;
+    border-radius: 2px;
+    border: 3px solid silver;
+    background-color: rgb(235, 235, 229);
+    margin-bottom: 10px;
+  }
