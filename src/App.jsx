@@ -1,183 +1,238 @@
-import React, { Component } from 'react';
-import './app.css';
+import React, { Component } from 'react'
+import './App.css'
+import { callApi, setSession} from './api';
 
 export default class App extends Component {
-  state = {
-    isLoggedIn: false
-  };
+  
+constructor(){
+  super();
+  this.userRegistration=this.userRegistration.bind(this);
+  this.signin=this.signin.bind(this);
+}
 
-  userRegistration = async () => {
-    let fullname = document.getElementById("fullname").value;
-    let email = document.getElementById("email").value;
-    let role = document.getElementById("role").value;
-    let password = document.getElementById("signup-password").value;
-    let confirmpassword = document.getElementById("confirmpassword").value;
+  showsignin(){
+    let popup=document.getElementById("popup");
+    let signin=document.getElementById("signin");
+    let signup=document.getElementById("signup");
+    let popupheader=document.getElementById("popupheader");
+    popupheader.innerHTML="Login";
+    signup.style.display="none";
+    signin.style.display="block";
+    popup.style.display="block";
+  }
+  showsignup(){
+    let popup=document.getElementById("popup");
+    let signin=document.getElementById("signin");
+    let signup=document.getElementById("signup");
+    let popupheader=document.getElementById("popupheader");
+    popupheader.innerHTML="create new account";
+    signup.style.display="block";
+    signin.style.display="none";
+    popup.style.display="block";
 
-    if (password !== confirmpassword) {
-      alert("Passwords do not match!");
+    let fullname=document.getElementById("fullname");
+    let email=document.getElementById("email");
+    let role=document.getElementById("role");
+    let signuppassword=document.getElementById("signuppassword");
+    let confirmpassword=document.getElementById("confirmpassword");
+
+    fullname.value="";
+    email.value="";
+    role.value="";
+    signuppassword.value="";
+    confirmpassword.vale="";
+
+  }
+
+  closesignin(event){
+    if(event.target.id=="popup"){
+    let popup=document.getElementById("popup");
+    popup.style.display="none";
+  }
+  }
+
+  userRegistration(){
+    let fullname=document.getElementById("fullname");
+    let email=document.getElementById("email");
+    let role=document.getElementById("role");
+    let signuppassword=document.getElementById("signuppassword");
+    let confirmpassword=document.getElementById("confirmpassword");
+    
+    fullname.style.border="";
+    email.style.border="";
+    role.style.border="";
+    signuppassword.style.border="";
+    confirmpassword.style.border="";
+
+    if(fullname.value==""){
+      fullname.style.border="1px solid red";
+      fullname.focus();
       return;
     }
 
-    var data = JSON.stringify({
-      fullname: fullname,
-      email: email,
-      password: password,
-      role: role
+    if(email.value==""){
+      email.style.border="1px solid red";
+      email.focus();
+      return;
+    }
+
+    if(role.value==""){
+      role.style.border="1px solid red";
+      role.focus();
+      return;
+    }
+
+    if(signuppassword.value==""){
+      signuppassword.style.border="1px solid red";
+      signuppassword.focus();
+      return;
+    }
+
+    if(confirmpassword.value==""){
+      confirmpassword.style.border="1px solid red";
+      confirmpassword.focus();
+      return;
+    }
+  
+   if(signuppassword.value != confirmpassword.value){
+    signuppassword.style.border="1px solid red";
+      signuppassword.focus();
+      return;
+   }
+
+    var data=JSON.stringify({
+      fullname:fullname.value,
+      email:email.value,
+      password:signuppassword.value,
+      role:role.value
     });
 
-    try {
-      const response = await fetch("http://localhost:9090/users/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: data
-      });
-      const result = await response.text();
-      alert(result);
-      this.setState({ isLoggedIn: true });
-    } catch (error) {
-      console.error("Error:", error);
+    callApi("POST","http://localhost:9090/users/signup",data,this.getResponse)
+  }
+ 
+  getResponse(res){
+    let resp=res.split('::');
+    alert(resp[1]);
+    if(resp[0] ==="200"){
+      let signin=document.getElementById("signin");
+      let signup=document.getElementById("signup");
+      signup.style.display="none";
+      signin.style.display="block"
     }
   }
+  
+  
+  signin(){
+  
+    username.style.border="";
+    password.style.border="";
+    responseDiv.innerHTML="";
 
-  userLogin = async () => {
-    let email = document.getElementById("username").value;
-    let password = document.getElementById("signin-password").value;
+ 
+     if(username.value===""){
+      username.style.border="1px solid red";
+      username.focus();
+      return;
+     }   
+     if(password.value===""){
+      password.style.border="1px solid red";
+      password.focus();
+      return;
+     }
 
-    var data = JSON.stringify({
-      email: email,
-      password: password
-    });
 
-    try {
-      const response = await fetch("http://localhost:9090/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: data
-      });
-      const result = await response.text();
-      alert(result);
-      this.setState({ isLoggedIn: true });
-    } catch (error) {
-      console.error("Error:", error);
+     let data=JSON.stringify({
+      email:username.value,
+      password:password.value
+     });
+
+
+
+
+
+     callApi("POST", "http://localhost:9090/users/signin", data, this.signinResponse);
+     
+  }
+
+  signinResponse(res){
+    let rdata = res.split('::');
+    if(rdata[0] === "200"){
+      setSession("csrid",rdata[1],1);
+      window.location.replace("/dashboard");
+    }
+    else{
+      // responseDiv.innerHTML = `<br/><label style='color:red'>${rdata[1]}</label>`;
+      alert(rdata[1]);
     }
   }
+  
 
-  userLogout = () => {
-    this.setState({ isLoggedIn: false });
-  }
-
-  showSignin = () => {
-    let popup = document.getElementById("popup");
-    popup.style.display = "block";
-
-    let signin = document.getElementById("signin");
-    signin.style.display = "block";
-    let signup = document.getElementById("signup");
-    signup.style.display = "none";
-  }
-
-  showSignup = () => {
-    let popup = document.getElementById("popup");
-    popup.style.display = "block";
-
-    let signin = document.getElementById("signin");
-    signin.style.display = "none";
-    let signup = document.getElementById("signup");
-    signup.style.display = "block";
-
-    let popupheader = document.getElementById("popupHeader");
-    popupheader.innerHTML = "Sign Up";
-  }
-
-  closeSignin = (event) => {
-    if (event.target.id === "popup") {
-      let popup = document.getElementById("popup");
-      popup.classList.remove("show");
-      setTimeout(() => {
-        popup.style.display = "none";
-      }, 300);
-    }
-  }
 
   render() {
     return (
-      <div className="container">
-        <div id='popup' onClick={this.closeSignin}>
-          <div id="popupwindow">
-            <div id='popupHeader'>login</div>
+      <div className='container'>
+        <div id="popup" onClick={this.closesignin}>
+          <div className='popupwindow'>
+            <div id='popupheader'>Login</div>
             <div id='signin'>
-              <label className='usernamelable'>User Name</label>
-              <input type='text' id="username" />
-              <label className='passwordlabel'>Password</label>
-              <input type='password' id="signin-password" />
-              <div className='forgotpassword'>Forget<label>Password?</label></div>
-              <button className='signinbutton' onClick={this.userLogin}>Signin</button>
-              <div className="div2">
-                Don't have Account? <br />
-                <label style={{ color: "green" }} onClick={this.showSignup}>Sign up?</label>
+              <label className='usernamelabel'>User Name</label>
+              <input type='text' id="username"/>
+              <label className='passwordlabel'>Password*</label>
+              <input type='password' id="password"/>
+              <div className='forgetpassword'>Forget<label>Passowrd?</label></div>
+              <button className='signinbutton' onClick={this.signin}>Signin</button>
+              <div className='div1' id="responseDiv"></div>
+              <div className='div2'>
+                Dont have an account?
+                <label onClick={this.showsignup}>Sign Up Now</label>
               </div>
             </div>
             <div id="signup">
-              <label htmlFor="fullname">Full Name*</label>
-              <input type="text" id="fullname" />
-              <label htmlFor="email">Email*</label>
-              <input type="email" id="email" />
-              <label htmlFor="phone">Select Role*</label>
+              <label>Full Name*</label>
+              <input type='text' id="fullname"/>
+              <label>Email</label>
+              <input type='email' id='email'/>
+              <label>Select a Role</label>
               <select id="role">
-                <option value=""></option>
                 <option value="1">Admin</option>
                 <option value="2">Employer</option>
-                <option value="3">Recruiter</option>
+                <option value="3">Job Seeker</option>
               </select>
-              <label htmlFor="password">Password*</label>
-              <input type="password" id="signup-password" />
-              <label htmlFor="confirmpassword">Confirm Password*</label>
-              <input type="password" id="confirmpassword" />
-              <button className='signupbutton' onClick={this.userRegistration}>Sign Up</button>
-              <div>Do you have already account?
-                <span onClick={this.showSignin} style={{ color: "green", position: "relative", left: "4px" }} >signin</span>
-              </div></div>
+              <label>Password</label>
+              <input type='password' id="signuppassword"/>
+              <label>Confirm Password</label>
+              <input type='password' id="confirmpassword"/>
+              <button className='registerbutton'onClick={this.userRegistration}>Register</button>
+              <div>Already have an account <span onClick={this.showsignin}>signin</span></div>
+            </div>
           </div>
         </div>
-        <header id="header">
-          <div className="header-left">
-            <img className='logo' src="/logo.png" alt="Logo" />
-            <div className="logotext"><span>Job </span> Portal</div>
+        <div id="header">
+          <img className='logo' src='/logo.png'/>
+          <div className='logoText'><span>Job</span> Portal</div>
+          <img className='signinicon' src='/user.png' onClick={this.showsignin}/>
+          <div className='signintext' onClick={this.showsignin}>SignIn</div>
+        </div>
+        <div id="content">
+          <div className='text1'>Indians No.1 Job Platform</div>
+          <div className='text2'>Your Job Search Ends Here</div>
+          <div className='text3'>Discover Career Opportunities</div>
+          <div className='searchbar'>
+            <input type='text' className='searchtext' placeholder='search by skill'/>
+            <input type='text' className='searchlocation'placeholder='job location'/>
+            <button className='searchbutton'>Search Jobs</button>
           </div>
-          <div className="signin-section">
-            {this.state.isLoggedIn ? (
-              <div className="logout" onClick={this.userLogout}>Logout</div>
-            ) : (
-              <>
-                <img className='signinicon' src="/user.png" alt="Sign In Icon" onClick={this.showSignin} />
-                <div className="signin" onClick={this.showSignin}>Sign In</div>
-              </>
-            )}
-          </div>
-        </header>
-        <main id="content">
-          <h1 className="text1">INDIA'S NO. #1 JOB PLATFORM</h1>
-          <h2 className="text2">Your Job Search Ends Here</h2>
-          <h3 className="text3">Discover Career Opportunities</h3>
-          <div className="searchbar" style={{ textAlign: 'left' }}>
-            <input type="text" placeholder='Search job by "skill"' className='searchtext' />
-            <input type="text" placeholder='Job location' className='searchlocation' />
-            <button className='searchbutton'>Search</button>
-          </div>
-        </main>
-        <footer id="footer">
-          <div className="footertext">Copyright @ 2025. All rights reserved</div>
-          <div className="socialmedia">
-            <img className="socialmediaicons" src='linkedin.png' alt="LinkedIn" />
-            <img className="socialmediaicons" src='facebook.png' alt="Facebook" />
-            <img className="socialmediaicons" src='twitter.png' alt="Twitter" />
-          </div>
-        </footer>
+
+        </div>
+        <div id="footer">
+          <label className='copyrightText'>Copyright @2025 All rights reserved</label>
+          <img className='socialmediaicons' src='/facebook.png'/>
+          <img className='socialmediaicons' src='/linkedin.png'/>
+          <img className='socialmediaicons' src='/twitter.png'/>
+
+        </div>
+
       </div>
-    );
+    )
   }
 }
